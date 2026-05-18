@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ON-DOC — Telemedicine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #1f6b3e;
+    --green-mid: #2e9158;
+    --green-light: #e8f5ee;
+    --green-pale: #f2faf5;
+    --yellow: #e8b800;
+    --yellow-light: #fdf6d0;
+    --yellow-pale: #fffceb;
+    --dark: #0f2d1c;
+    --text: #1a3a27;
+    --muted: #5a7d6a;
+    --white: #ffffff;
+    --border: #c8e0d2;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw;
+    height: 68px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: var(--green);
+  }
+  .nav-logo span { color: var(--yellow); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 14px; font-weight: 500;
+    color: var(--muted); transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta {
+    background: var(--green); color: #fff;
+    border: none; border-radius: 50px; padding: 10px 22px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+  }
+  .nav-cta:hover { background: var(--green-mid); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding: 68px 5vw 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 60px;
+    background: var(--green-pale);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #c8ebd7 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 30%;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fdf0a0 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--yellow-light); color: #8a6e00;
+    border: 1px solid #e8d060; border-radius: 50px;
+    padding: 6px 16px; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge::before { content: '●'; color: var(--yellow); font-size: 8px; }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(38px, 5vw, 62px);
+    line-height: 1.1;
+    color: var(--dark);
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 em { font-style: italic; color: var(--green); }
+  .hero-sub {
+    font-size: 17px; line-height: 1.7; color: var(--muted);
+    max-width: 480px; margin-bottom: 36px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-btns {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-main {
+    background: var(--green); color: #fff;
+    border: none; border-radius: 50px; padding: 14px 30px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-main:hover { background: var(--green-mid); transform: translateY(-2px); }
+  .btn-sec {
+    background: var(--yellow); color: var(--dark);
+    border: none; border-radius: 50px; padding: 14px 30px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: filter 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-sec:hover { filter: brightness(0.93); transform: translateY(-2px); }
+
+  /* HERO PHONE MOCKUPS */
+  .hero-phones {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; align-items: flex-end;
+    gap: -20px; padding: 60px 0 40px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+  .phone-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    width: 200px;
+    box-shadow: 0 20px 60px rgba(31,107,62,0.12);
+  }
+  .phone-card:first-child {
+    transform: rotate(-4deg) translateY(20px);
+    z-index: 0;
+  }
+  .phone-card:last-child {
+    transform: rotate(4deg) translateY(20px);
+    z-index: 0;
+  }
+  .phone-card.main {
+    transform: none;
+    z-index: 2;
+    width: 210px;
+    box-shadow: 0 30px 80px rgba(31,107,62,0.2);
+  }
+  .pbar {
+    background: var(--green); padding: 12px 14px 10px;
+  }
+  .pbar h3 { color: #fff; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .pbar p { color: rgba(255,255,255,0.7); font-size: 10px; }
+  .pbody { padding: 14px; }
+  .ptile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ptile {
+    border-radius: 12px; padding: 12px 8px;
+    text-align: center; font-size: 10px; font-weight: 600;
+  }
+  .ptile.g { background: var(--green-light); color: var(--green); }
+  .ptile.y { background: var(--yellow-light); color: #8a6e00; }
+  .ptile-icon { font-size: 18px; margin-bottom: 4px; display: block; }
+  .pfield {
+    width: 100%; border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 10px; font-size: 10px;
+    color: var(--text); margin-bottom: 6px; font-family: inherit;
+  }
+  .pbtn {
+    width: 100%; background: var(--green); color: #fff;
+    border: none; border-radius: 10px; padding: 8px;
+    font-size: 10px; font-weight: 600; margin-bottom: 5px;
+    font-family: inherit; cursor: pointer;
+  }
+  .pbtn.yellow { background: var(--yellow); color: var(--dark); }
+  .pcard {
+    border-radius: 10px; padding: 10px; margin-bottom: 6px;
+    font-size: 10px;
+  }
+  .pcard.g { background: var(--green-light); }
+  .pcard.y { background: var(--yellow-light); }
+  .pcard strong { display: block; margin-bottom: 2px; font-size: 10px; }
+  .pcard.g strong { color: var(--green); }
+  .pcard.y strong { color: #8a6e00; }
+  .pcard span { color: var(--muted); font-size: 9px; }
+
+  /* STATS STRIP */
+  .stats {
+    background: var(--green);
+    padding: 40px 5vw;
+    display: flex; justify-content: center; gap: 80px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px; color: #fff; line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-num span { color: var(--yellow); }
+  .stat-label { font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 500; }
+
+  /* FEATURES */
+  .section { padding: 100px 5vw; }
+  .section-label {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--green-mid);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.15; color: var(--dark);
+    max-width: 500px; margin-bottom: 60px;
+  }
+  .section-title em { font-style: italic; color: var(--green); }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+  }
+  .feat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .feat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(31,107,62,0.1);
+  }
+  .feat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--green);
+  }
+  .feat-card:nth-child(even)::before { background: var(--yellow); }
+  .feat-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 20px;
+  }
+  .feat-card:nth-child(even) .feat-icon { background: var(--yellow-light); }
+  .feat-card h3 {
+    font-size: 17px; font-weight: 600; color: var(--dark);
+    margin-bottom: 10px;
+  }
+  .feat-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .how { background: var(--green-pale); }
+  .how-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0; position: relative;
+  }
+  .how-grid::before {
+    content: '';
+    position: absolute; top: 36px; left: 10%; right: 10%; height: 2px;
+    background: repeating-linear-gradient(90deg, var(--green-mid) 0, var(--green-mid) 12px, transparent 12px, transparent 24px);
+    z-index: 0;
+  }
+  .step { text-align: center; padding: 0 20px 40px; position: relative; z-index: 1; }
+  .step-num {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(31,107,62,0.25);
+  }
+  .step:nth-child(even) .step-num { background: var(--yellow); color: var(--dark); }
+  .step h3 { font-size: 16px; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
+  .step p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+  /* DOCTORS */
+  .doctors-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px; margin-top: 20px;
+  }
+  .doc-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .doc-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(31,107,62,0.1);
+  }
+  .doc-avatar {
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    font-size: 52px;
+  }
+  .doc-avatar.g { background: var(--green-light); }
+  .doc-avatar.y { background: var(--yellow-light); }
+  .doc-info { padding: 18px; }
+  .doc-info h3 { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+  .doc-spec { font-size: 12px; color: var(--green-mid); font-weight: 600; margin-bottom: 10px; }
+  .doc-rating { font-size: 12px; color: var(--muted); }
+  .doc-rating span { color: var(--yellow); }
+  .doc-btn {
+    display: block; width: 100%; background: var(--green-light);
+    color: var(--green); border: none; border-radius: 10px;
+    padding: 9px; font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit; margin-top: 12px; transition: background 0.2s;
+  }
+  .doc-btn:hover { background: var(--green); color: #fff; }
+
+  /* CTA BANNER */
+  .cta-banner {
+    background: var(--dark);
+    padding: 80px 5vw;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(46,145,88,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    color: #fff; margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .cta-banner h2 em { font-style: italic; color: var(--yellow); }
+  .cta-banner p {
+    font-size: 16px; color: rgba(255,255,255,0.6);
+    margin-bottom: 36px; position: relative; z-index: 1;
+  }
+  .cta-banner .btn-sec { position: relative; z-index: 1; font-size: 16px; padding: 16px 36px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--green-pale); border-top: 1px solid var(--border);
+    padding: 50px 5vw 30px;
+  }
+  .footer-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    flex-wrap: wrap; gap: 40px; margin-bottom: 40px;
+  }
+  .footer-brand { max-width: 280px; }
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px; color: var(--green); margin-bottom: 12px;
+  }
+  .footer-logo span { color: var(--yellow); }
+  .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 14px; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 8px; }
+  .footer-col a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--green); }
+  .footer-bottom {
+    border-top: 1px solid var(--border); padding-top: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+    font-size: 12px; color: var(--muted);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding-top: 100px; gap: 40px; }
+    .hero-phones { display: none; }
+    .how-grid::before { display: none; }
+    .nav-links { display: none; }
+    .stats { gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">ON-<span>DOC</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#doctors">Doctors</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta">Get Started Free</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">Now available in the Philippines</div>
+    <h1>Healthcare,<br><em>whenever</em><br>you need it.</h1>
+    <p class="hero-sub">Connect with licensed doctors via video call, book appointments, and manage your medical records — all from your phone.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-main">Start a Consultation</a>
+      <a href="#how" class="btn-sec">See How it Works</a>
+    </div>
+  </div>
+  <div class="hero-phones">
+    <div class="phone-card">
+      <div class="pbar"><h3>Login / sign up</h3><p>Welcome to ON-DOC</p></div>
+      <div class="pbody">
+        <input class="pfield" placeholder="Email address" />
+        <input class="pfield" placeholder="Password" type="password" />
+        <button class="pbtn">Login</button>
+      </div>
+    </div>
+    <div class="phone-card main">
+      <div class="pbar"><h3>Home dashboard</h3><p>Quick healthcare access</p></div>
+      <div class="pbody">
+        <div class="ptile-grid">
+          <div class="ptile g"><span class="ptile-icon">🩺</span>Consult doctor</div>
+          <div class="ptile y"><span class="ptile-icon">📅</span>Appointments</div>
+          <div class="ptile y"><span class="ptile-icon">📋</span>Records</div>
+          <div class="ptile g"><span class="ptile-icon">💊</span>Health tips</div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-card">
+      <div class="pbar"><h3>Follow-up</h3><p>Track your recovery</p></div>
+      <div class="pbody">
+        <div class="pcard g"><strong>Latest consultation</strong><span>Follow-up scheduled.</span></div>
+        <div class="pcard y"><strong>Recommendations</strong><span>Continue medication.</span></div>
+        <button class="pbtn yellow">Download record</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">50<span>K+</span></div><div class="stat-label">Patients served</div></div>
+  <div class="stat"><div class="stat-num">200<span>+</span></div><div class="stat-label">Licensed doctors</div></div>
+  <div class="stat"><div class="stat-num">24<span>/7</span></div><div class="stat-label">Available anytime</div></div>
+  <div class="stat"><div class="stat-num">4.9<span>★</span></div><div class="stat-label">Average rating</div></div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <span class="section-label">What we offer</span>
+  <h2 class="section-title reveal">Everything you need for <em>better health</em></h2>
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <div class="feat-icon">🎥</div>
+      <h3>Video Consultation</h3>
+      <p>Face-to-face consultations with licensed physicians from the comfort of your home. No travel, no waiting rooms.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon">📅</div>
+      <h3>Easy Appointment Booking</h3>
+      <p>Choose your hospital, preferred doctor, date and time. Get instant confirmation and reminders.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon">📁</div>
+      <h3>Digital Medical Records</h3>
+      <p>All your health history, prescriptions, and lab results securely stored and accessible at any time.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon">🔔</div>
+      <h3>Follow-Up Reminders</h3>
+      <p>Automatic reminders for medication schedules, follow-up consultations, and upcoming appointments.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon">💬</div>
+      <h3>In-App Messaging</h3>
+      <p>Chat directly with your doctor before and after consultations. Ask follow-up questions anytime.</p>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon">🛡️</div>
+      <h3>Secure & Private</h3>
+      <p>End-to-end encrypted consultations. Your health data stays private and protected at all times.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="how">
+  <span class="section-label">Simple process</span>
+  <h2 class="section-title reveal">Up and running in <em>four steps</em></h2>
+  <div class="how-grid">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3>Create your account</h3>
+      <p>Sign up in under two minutes. Just your email and basic details to get started.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">2</div>
+      <h3>Choose a doctor</h3>
+      <p>Browse verified specialists by specialty, rating, and availability that fits your schedule.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">3</div>
+      <h3>Start your consultation</h3>
+      <p>Join a secure video call or chat session directly from the app — no downloads needed.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">4</div>
+      <h3>Get your prescription</h3>
+      <p>Receive e-prescriptions, lab requests, and follow-up care plans straight to your records.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTORS -->
+<section class="section" id="doctors">
+  <span class="section-label">Our team</span>
+  <h2 class="section-title reveal">Meet our <em>top doctors</em></h2>
+  <div class="doctors-grid">
+    <div class="doc-card reveal">
+      <div class="doc-avatar g">👩‍⚕️</div>
+      <div class="doc-info">
+        <h3>Dr. Maria Santos</h3>
+        <div class="doc-spec">General Physician</div>
+        <div class="doc-rating"><span>★★★★★</span> 4.9 · 320 reviews</div>
+        <button class="doc-btn">Book Appointment</button>
+      </div>
+    </div>
+    <div class="doc-card reveal">
+      <div class="doc-avatar y">👨‍⚕️</div>
+      <div class="doc-info">
+        <h3>Dr. Jose Reyes</h3>
+        <div class="doc-spec">Pediatrician</div>
+        <div class="doc-rating"><span>★★★★★</span> 4.8 · 215 reviews</div>
+        <button class="doc-btn">Book Appointment</button>
+      </div>
+    </div>
+    <div class="doc-card reveal">
+      <div class="doc-avatar g">👩‍⚕️</div>
+      <div class="doc-info">
+        <h3>Dr. Ana Cruz</h3>
+        <div class="doc-spec">Cardiologist</div>
+        <div class="doc-rating"><span>★★★★★</span> 4.9 · 180 reviews</div>
+        <button class="doc-btn">Book Appointment</button>
+      </div>
+    </div>
+    <div class="doc-card reveal">
+      <div class="doc-avatar y">👨‍⚕️</div>
+      <div class="doc-info">
+        <h3>Dr. Carlo Lim</h3>
+        <div class="doc-spec">Dermatologist</div>
+        <div class="doc-rating"><span>★★★★☆</span> 4.7 · 140 reviews</div>
+        <button class="doc-btn">Book Appointment</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner" id="contact">
+  <h2>Your health can't <em>wait.</em></h2>
+  <p>Join thousands of Filipinos who already trust ON-DOC for their healthcare needs.</p>
+  <a href="#" class="btn-sec">Get Started — It's Free</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">ON-<span>DOC</span></div>
+      <p>Bringing quality healthcare closer to every Filipino — anytime, anywhere.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">Video Consultation</a></li>
+        <li><a href="#">Book Appointment</a></li>
+        <li><a href="#">Medical Records</a></li>
+        <li><a href="#">Health Tips</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Doctors</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ON-DOC. All rights reserved.</span>
+    <span>Made with ❤️ in the Philippines</span>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
